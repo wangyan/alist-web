@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-          registry-url: "https://registry.npmjs.org"
+          registry-url: "https://npm.pkg.github.com"
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
@@ -44,7 +44,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: develop
           path: alist-web
           persist-credentials: false
           fetch-depth: 0
@@ -53,9 +53,9 @@ jobs:
       - name: Checkout dist repo
         uses: actions/checkout@v4
         with:
-          repository: alist-org/web-dist
+          repository: wangyan/alist-web-dist
           ref: main
-          path: web-dist
+          path: alist-web-dist
           persist-credentials: false
           fetch-depth: 0
 
@@ -67,10 +67,10 @@ jobs:
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
-      - name: Publish npm
+      - name: Publish gpr
         run: |
           cd alist-web
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           pnpm publish --no-git-checks
           cd ..
         env:
@@ -81,10 +81,10 @@ jobs:
         with:
           github_token: ${{ secrets.MY_TOKEN }}
           branch: main
-          directory: web-dist
-          repository: alist-org/web-dist
+          directory: alist-web-dist
+          repository: wangyan/alist-web-dist
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: compress/*
