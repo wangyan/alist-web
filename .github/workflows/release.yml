@@ -74,7 +74,7 @@ jobs:
           pnpm publish --no-git-checks
           cd ..
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.MY_TOKEN }}
 
       - name: Upload dist files
         uses: ad-m/github-push-action@master
